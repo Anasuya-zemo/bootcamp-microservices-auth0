@@ -1,9 +1,5 @@
 FROM nginx:1.25.0-alpine
 
-# RUN npm install
-
-# RUN npm run build
-
 COPY dist /usr/share/nginx/html/
 
 EXPOSE 80

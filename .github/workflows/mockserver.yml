@@ -2,6 +2,8 @@ name: CI/CD for the mockserver into EKS cluster
 
 on:
   push:
+    branches:
+      - master
     paths:
       - frontend/db/**
       - .github/workflows/mockserver.yml
