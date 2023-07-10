@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: mockserver-image
-        image: ghcr.io/anasuya-zemo/mockserver:${{ github.run_number }}
+        image: ghcr.io/anasuya-zemo/mockserver
         ports:
         - containerPort: 3005
       imagePullSecrets: 

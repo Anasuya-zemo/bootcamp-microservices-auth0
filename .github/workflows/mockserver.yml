@@ -64,11 +64,13 @@ jobs:
         run: aws eks update-kubeconfig --name my_cluster --region us-east-1
 
       - name: Deploy to EKS cluster
+        env:
+          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/mockserver:${{ github.run_number }}
         run: |
           cd secrets
           kubectl apply -f ghcrSecret.yml
           cd ../deploymentKube
-          kubectl apply -f mockserverDeploy.yml
+          kubectl set image deployment/mockserver-deploy mockserver-image=$imageTag
           cd ../services
           kubectl apply -f clusterIp.yml
           cd ../ingress
