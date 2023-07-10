@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cluster-ip
+spec:
+  ports:
+  - targetPort: 3005
+    port: 3005
+  selector:
+    type: MS

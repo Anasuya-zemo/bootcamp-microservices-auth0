@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: mockserver-deploy
+   labels:
+      type: MSD
+spec:
+  template:
+    metadata:
+      name: MS-pod
+      labels:
+        type: MS
+    spec:
+      containers:
+      - name: mockserver-image
+        image: ghcr.io/anasuya-zemo/mockserver:latest
+        ports:
+        - containerPort: 3005
+      imagePullSecrets: 
+      - name: ghcr-secret
+
+  replicas: 1
+  selector:
+    matchLabels:
+      type: MS
