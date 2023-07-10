@@ -7,12 +7,13 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - http:
+  - host: frontend.spcluster.tk
+    http:
      paths:
      - path: /
        pathType: Prefix
        backend:
          service:
-           name: cluster-ip
+           name: cluster-ip-frontend
            port:
-             number: 3005
+             number: 80
