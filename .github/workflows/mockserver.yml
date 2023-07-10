@@ -63,7 +63,7 @@ jobs:
       - name: update kube Config file
         run: aws eks update-kubeconfig --name my_cluster --region us-east-1
 
-      - name: Deploy to EKS
+      - name: Deploy to EKS cluster
         run: |
           cd secrets
           kubectl apply -f ghcrSecret.yml
