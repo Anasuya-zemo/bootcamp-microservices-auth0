@@ -12,25 +12,11 @@ jobs:
 
      defaults:
        run:
-         working-directory: frontend
+         working-directory: frontend/db
 
      steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-npmNode-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npmNode-
-
-      - name: install dependencies
-        run: npm install --legacy-peer-deps
-
-      - name: run build
-        run: npm run build
       
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
@@ -47,12 +33,6 @@ jobs:
           push: true
           tags: ghcr.io/${{ secrets.DOCKERUSER }}/mockserver:${{ github.run_number }}
 
-      - name: install kubectl 
-        uses: azure/setup-kubectl@v3
-        with:
-          version: 'v1.25.1'
-        id: install
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -66,14 +46,6 @@ jobs:
       - name: Deploy to EKS cluster
         env:
           imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/mockserver:${{ github.run_number }}
-        run: |
-          cd secrets
-          kubectl apply -f ghcrSecret.yml
-          cd ../deploymentKube
-          kubectl set image deployment/mockserver-deploy mockserver-image=$imageTag
-          cd ../services
-          kubectl apply -f clusterIp.yml
-          cd ../ingress
-          kubectl apply -f ingress.yml
+        run: kubectl set image deployment/mockserver-deploy mockserver-image=$imageTag
 
       
