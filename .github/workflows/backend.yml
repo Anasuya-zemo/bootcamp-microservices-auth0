@@ -81,7 +81,7 @@ jobs:
         with:
           context: backend/appointment-service
           push: true
-          tags: $imageTag
+          tags: ghcr.io/${{ secrets.DOCKERUSER }}/appointment-service:${{ github.run_number }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -124,7 +124,7 @@ jobs:
         with:
           context: backend/card-service
           push: true
-          tags: $imageTag
+          tags: ghcr.io/${{ secrets.DOCKERUSER }}/card-service:${{ github.run_number }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -167,7 +167,7 @@ jobs:
         with:
           context: backend/card-service
           push: true
-          tags: $imageTag
+          tags: ghcr.io/${{ secrets.DOCKERUSER }}/cloud-gateway:${{ github.run_number }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -210,7 +210,7 @@ jobs:
         with:
           context: backend/card-service
           push: true
-          tags: $imageTag
+          tags: ghcr.io/${{ secrets.DOCKERUSER }}/lab-service:${{ github.run_number }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -253,7 +253,7 @@ jobs:
         with:
           context: backend/card-service
           push: true
-          tags: $imageTag
+          tags: ghcr.io/${{ secrets.DOCKERUSER }}/patient-service:${{ github.run_number }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -296,7 +296,7 @@ jobs:
         with:
           context: backend/card-service
           push: true
-          tags: $imageTag
+          tags: ghcr.io/${{ secrets.DOCKERUSER }}/service-registry:${{ github.run_number }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -339,7 +339,7 @@ jobs:
         with:
           context: backend/card-service
           push: true
-          tags: $imageTag
+          tags: ghcr.io/${{ secrets.DOCKERUSER }}/test-lab-service:${{ github.run_number }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -382,7 +382,7 @@ jobs:
         with:
           context: backend/card-service
           push: true
-          tags: $imageTag
+          tags: ghcr.io/${{ secrets.DOCKERUSER }}/test-service:${{ github.run_number }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -425,7 +425,7 @@ jobs:
         with:
           context: backend/card-service
           push: true
-          tags: $imageTag
+          tags: ghcr.io/${{ secrets.DOCKERUSER }}/user-service:${{ github.run_number }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
