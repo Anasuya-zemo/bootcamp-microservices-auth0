@@ -16,9 +16,9 @@ spec:
         image: ghcr.io/anasuya-zemo/database:latest
         ports:
         - containerPort: 3306
-        env:
-            - name: MYSQL_ROOT_PASSWORD
-              value: Bootcamp@61
+        envFrom:
+          - secretRef: 
+              name: database-secret
       imagePullSecrets: 
       - name: ghcr-secret
 
