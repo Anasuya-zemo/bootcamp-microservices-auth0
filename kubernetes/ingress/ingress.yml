@@ -27,4 +27,15 @@ spec:
               name: cluster-ip-mockserver
               port:
                 number: 3005
+  - host: backend.spcluster.tk
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: service-registry
+              port:
+                number: 8761
+
   
