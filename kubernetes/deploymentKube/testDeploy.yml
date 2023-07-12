@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: test-service-deploy
+   labels:
+      type: test-svc
+spec:
+  template:
+    metadata:
+      name: test-pod
+      labels:
+        type: test-svc
+    spec:
+      containers:
+      - name: test-service-image
+        image: ghcr.io/anasuya-zemo/test-service:latest
+        ports:
+        - containerPort: 9007
+      imagePullSecrets: 
+      - name: ghcr-secret
+
+  replicas: 1
+  selector:
+    matchLabels:
+      type: test-svc

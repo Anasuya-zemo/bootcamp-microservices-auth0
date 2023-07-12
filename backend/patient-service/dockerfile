@@ -1,0 +1,7 @@
+FROM adoptopenjdk:11-jdk-hotspot
+
+COPY ./target/*.jar patient.jar
+
+EXPOSE 9005
+
+CMD ["java", "-jar", "patient.jar"]

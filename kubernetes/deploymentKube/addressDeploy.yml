@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: address-service-deploy
+   labels:
+      type: address-svc
+spec:
+  template:
+    metadata:
+      name: address-pod
+      labels:
+        type: address-svc
+    spec:
+      containers:
+      - name: address-service-image
+        image: ghcr.io/anasuya-zemo/address-service:latest
+        ports:
+        - containerPort: 9001
+      imagePullSecrets: 
+      - name: ghcr-secret
+
+  replicas: 1
+  selector:
+    matchLabels:
+      type: address-svc

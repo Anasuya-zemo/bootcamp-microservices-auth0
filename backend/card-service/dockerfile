@@ -1,0 +1,7 @@
+FROM adoptopenjdk:11-jdk-hotspot
+
+COPY ./target/*.jar card.jar
+
+EXPOSE 9003
+
+CMD ["java", "-jar", "card.jar"]

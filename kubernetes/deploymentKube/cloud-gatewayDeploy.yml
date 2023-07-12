@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: cloud-gateway-deploy
+   labels:
+      type: cloud-gateway
+spec:
+  template:
+    metadata:
+      name: cloud-gateway
+      labels:
+        type: cloud-gateway
+    spec:
+      containers:
+      - name: cloud-gateway-image
+        image: ghcr.io/anasuya-zemo/cloud-gateway:latest
+        ports:
+        - containerPort: 9191
+      imagePullSecrets: 
+      - name: ghcr-secret
+
+  replicas: 1
+  selector:
+    matchLabels:
+      type: cloud-gateway

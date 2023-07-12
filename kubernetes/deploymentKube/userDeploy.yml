@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: user-service-deploy
+   labels:
+      type: user-svc
+spec:
+  template:
+    metadata:
+      name: user-pod
+      labels:
+        type: user-svc
+    spec:
+      containers:
+      - name: user-service-image
+        image: ghcr.io/anasuya-zemo/user-service:latest
+        ports:
+        - containerPort: 9008
+      imagePullSecrets: 
+      - name: ghcr-secret
+
+  replicas: 1
+  selector:
+    matchLabels:
+      type: user-svc

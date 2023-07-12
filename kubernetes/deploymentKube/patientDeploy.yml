@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: patient-service-deploy
+   labels:
+      type: patient-svc
+spec:
+  template:
+    metadata:
+      name: patient-pod
+      labels:
+        type: patient-svc
+    spec:
+      containers:
+      - name: patient-service-image
+        image: ghcr.io/anasuya-zemo/patient-service:latest
+        ports:
+        - containerPort: 9005
+      imagePullSecrets: 
+      - name: ghcr-secret
+
+  replicas: 1
+  selector:
+    matchLabels:
+      type: patient-svc

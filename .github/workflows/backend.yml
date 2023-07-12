@@ -1,0 +1,87 @@
+name: CI/CD for the backend into EKS cluster
+
+on:
+  push:
+    branches:
+      - deployment
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend.yaml'
+ 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    strategy:
+        matrix:
+            svc: [address-service,appointment-service,card-service,cloud-gateway,lab-service,patient-service,service-registry,test-lab-service,test-service,user-service]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+         registry: ghcr.io
+         username: ${{ github.actor }}
+         password: ${{ secrets.DOCKERPW }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: us-east-1
+
+      - name: update kube Config file
+        run: aws eks update-kubeconfig --name my_cluster --region us-east-1
+
+      - name: Run Strategy
+        env:
+         IMAGE: ghcr.io/${{ secrets.DOCKERUSER }}/${{ matrix.svc }}:${{ github.run_number }}
+        run: |
+            cd ${{ matrix.svc }}
+            mvn clean package -DskipTests
+            docker build . -t $IMAGE
+            docker push $IMAGE
+            kubectl set image deployment/${{ matrix.svc }}-deploy ${{ matrix.svc }}-image=$IMAGE
+ 
+
+
+
+
+
+          
+
+
+
+
+
+    #   - name: Build and Push Docker Image
+    #     uses: docker/build-push-action@v2
+    #     with:
+    #       context: ./backend
+    #       push: true
+    #       tags: ghcr.io/${{ github.actor }}/auth0-bootcamp-backend:v${{ github.run_number }}
+        
+    #   - name: Configure AWS Credentials
+    #     uses: aws-actions/configure-aws-credentials@v1
+    #     with:
+    #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #       aws-region: ${{ secrets.AWS_REGION }}
+
+    #   - name: adding eks-cluster
+    #     env: 
+    #       aws_region: ${{ secrets.AWS_REGION }}
+    #       cluster_name: ${{ secrets.CLUSTER_NAME }}
+    #       IMAGE: ghcr.io/${{ github.actor }}/auth0-bootcamp-backend:v${{ github.run_number }}
+    #     run: |
+    #       aws eks --region $aws_region update-kubeconfig --name $cluster_name
+    #       kubectl set image deployment/backend-deployment backend-pod=$IMAGE
+
+

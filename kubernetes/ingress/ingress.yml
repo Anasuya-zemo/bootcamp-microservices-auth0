@@ -24,6 +24,7 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: cluster-ip
+              name: cluster-ip-mockserver
               port:
                 number: 3005
+  

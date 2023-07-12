@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: lab-service-deploy
+   labels:
+      type: lab-svc
+spec:
+  template:
+    metadata:
+      name: lab-pod
+      labels:
+        type: lab-svc
+    spec:
+      containers:
+      - name: lab-service-image
+        image: ghcr.io/anasuya-zemo/lab-service:latest
+        ports:
+        - containerPort: 9004
+      imagePullSecrets: 
+      - name: ghcr-secret
+
+  replicas: 1
+  selector:
+    matchLabels:
+      type: lab-svc

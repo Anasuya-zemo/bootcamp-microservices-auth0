@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: database-deploy
+   labels:
+      type: DB
+spec:
+  template:
+    metadata:
+      name: DB-pod
+      labels:
+        type: DB
+    spec:
+      containers:
+      - name: database-image
+        image: ghcr.io/anasuya-zemo/database:latest
+        ports:
+        - containerPort: 3306
+        env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+      imagePullSecrets: 
+      - name: ghcr-secret
+
+  replicas: 1
+  selector:
+    matchLabels:
+      type: DB

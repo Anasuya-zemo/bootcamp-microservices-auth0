@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: appointment-service-deploy
+   labels:
+      type: appointment-svc
+spec:
+  template:
+    metadata:
+      name: appointment-pod
+      labels:
+        type: appointment-svc
+    spec:
+      containers:
+      - name: appointment-service-image
+        image: ghcr.io/anasuya-zemo/appointment-service:latest
+        ports:
+        - containerPort: 9002
+      imagePullSecrets: 
+      - name: ghcr-secret
+
+  replicas: 1
+  selector:
+    matchLabels:
+      type: appointment-svc

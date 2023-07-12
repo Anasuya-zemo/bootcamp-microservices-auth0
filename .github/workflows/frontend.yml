@@ -24,12 +24,13 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
-          path: node_modules
+          path: frontend/node_modules
           key: ${{ runner.os }}-npmNode-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npmNode-
 
       - name: install dependencies
+        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: npm install --legacy-peer-deps
 
       - name: run build
@@ -62,6 +63,8 @@ jobs:
       - name: Deploy to EKS cluster
         env:
           imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/frontend:${{ github.run_number }}
-        run: kubectl set image deployment/frontend-deploy frontend-image=$imageTag
+        run: |
+         kubectl set image deployment/frontend-deploy frontend-image=$imageTag
+         
 
       

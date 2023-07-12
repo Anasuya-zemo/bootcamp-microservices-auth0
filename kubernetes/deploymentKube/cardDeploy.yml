@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: card-service-deploy
+   labels:
+      type: card-svc
+spec:
+  template:
+    metadata:
+      name: card-pod
+      labels:
+        type: card-svc
+    spec:
+      containers:
+      - name: card-service-image
+        image: ghcr.io/anasuya-zemo/card-service:latest
+        ports:
+        - containerPort: 9003
+      imagePullSecrets: 
+      - name: ghcr-secret
+
+  replicas: 1
+  selector:
+    matchLabels:
+      type: card-svc
