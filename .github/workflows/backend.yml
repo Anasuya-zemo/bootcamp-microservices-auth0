@@ -11,7 +11,7 @@ on:
 jobs:
   address-service:
      runs-on: ubuntu-latest
-     if: startsWith(github.event_path, 'backend/address-service/')
+    #  if: startsWith(github.event_path, 'backend/address-service/**')
      defaults:
       run:
         working-directory: backend/address-service
@@ -58,7 +58,7 @@ jobs:
      defaults:
       run:
         working-directory: backend/appointment-service
-     if: startsWith(github.event_path, 'backend/appointment-service/')
+    #  if: startsWith(github.event_path, 'backend/appointment-service/**')
      env:
           imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/appointment-service:${{ github.run_number }}
      
@@ -101,7 +101,7 @@ jobs:
      defaults:
       run:
         working-directory: backend/card-service
-     if: startsWith(github.event_path, 'backend/card-service/')
+    #  if: startsWith(github.event_path, 'backend/card-service/**')
      env:
           imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/card-service:${{ github.run_number }}
      
@@ -144,7 +144,7 @@ jobs:
      defaults:
       run:
         working-directory: backend/cloud-gateway
-     if: startsWith(github.event_path, 'backend/cloud-gateway/')
+     if: startsWith(github.event_path, 'backend/cloud-gateway/**')
      env:
           imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/cloud-gateway:${{ github.run_number }}
      
@@ -187,7 +187,7 @@ jobs:
      defaults:
       run:
         working-directory: backend/lab-service
-     if: startsWith(github.event_path, 'backend/lab-service/')
+    #  if: startsWith(github.event_path, 'backend/lab-service/**')
      env:
           imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/lab-service:${{ github.run_number }}
      
@@ -230,7 +230,7 @@ jobs:
      defaults:
       run:
         working-directory: backend/patient-service
-     if: startsWith(github.event_path, 'backend/patient-service/')
+    #  if: startsWith(github.event_path, 'backend/patient-service/**')
      env:
           imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/patient-service:${{ github.run_number }}
      
@@ -273,7 +273,7 @@ jobs:
      defaults:
       run:
         working-directory: backend/service-registry
-     if: startsWith(github.event_path, 'backend/service-registry/')
+    #  if: startsWith(github.event_path, 'backend/service-registry/**')
      env:
           imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/service-registry:${{ github.run_number }}
      
@@ -316,7 +316,7 @@ jobs:
      defaults:
       run:
         working-directory: backend/test-lab-service
-     if: startsWith(github.event_path, 'backend/test-lab-service/')
+    #  if: startsWith(github.event_path, 'backend/test-lab-service/**')
      env:
           imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/test-lab-service:${{ github.run_number }}
      
@@ -359,7 +359,7 @@ jobs:
      defaults:
       run:
         working-directory: backend/test-service
-     if: startsWith(github.event_path, 'backend/test-service/')
+    #  if: startsWith(github.event_path, 'backend/test-service/**')
      env:
           imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/test-service:${{ github.run_number }}
      
@@ -402,7 +402,7 @@ jobs:
      defaults:
       run:
         working-directory: backend/user-service
-     if: startsWith(github.event_path, 'backend/user-service/')
+    #  if: startsWith(github.event_path, 'backend/user-service/**')
      env:
           imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/user-service:${{ github.run_number }}
      
