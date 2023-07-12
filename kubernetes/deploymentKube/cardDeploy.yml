@@ -16,6 +16,18 @@ spec:
         image: ghcr.io/anasuya-zemo/card-service:latest
         ports:
         - containerPort: 9003
+        envFrom:
+          - secretRef: 
+              name: database-secret
+        env:
+          - name: eureka.client.service-url.defaultZone
+            value: https://backend.spcluster.tk/eureka/
+          
+          - name: eureka.instance.hostname
+            value: address
+
+          - name: spring.datasource.url
+            value: jdbc:mysql://3.83.138.1:30001/zemoso_diagnostics?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
       imagePullSecrets: 
       - name: ghcr-secret
 
