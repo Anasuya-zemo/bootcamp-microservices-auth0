@@ -11,7 +11,7 @@ on:
 jobs:
   address-service:
      runs-on: ubuntu-latest
-     if: github.event_path == "backend/address-service/**"
+     if: startsWith(github.event_path, 'backend/address-service/')
      defaults:
       run:
         working-directory: backend/address-service
