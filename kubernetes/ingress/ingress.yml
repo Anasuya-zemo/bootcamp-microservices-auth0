@@ -37,5 +37,12 @@ spec:
               name: service-registry
               port:
                 number: 8761
+        - path: /address
+          pathType: Prefix
+          backend:
+            service:
+              name: address
+              port:
+                number: 9001
 
   
