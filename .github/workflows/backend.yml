@@ -14,7 +14,7 @@ jobs:
      defaults:
       run:
         working-directory: backend/address-service
-    #  if: github.event_path == "backend/address-service/**"
+     if: ${{ github.event_path }} == "backend/address-service/**"
      env:
         imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/address-service:${{ github.run_number }}
      
@@ -52,7 +52,6 @@ jobs:
 
       - name: Deploy to EKS cluster
         run: |
-         echo ${{ github.event_path }}
          kubectl set image deployment/address-service-deploy address-service-image=$imageTag
  
   # appointment-service:
