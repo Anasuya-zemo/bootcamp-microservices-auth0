@@ -15,13 +15,7 @@ jobs:
       run:
         working-directory: backend
 
-    strategy:
-        matrix:
-            svc: [address-service,appointment-service,card-service,cloud-gateway,lab-service,patient-service,service-registry,test-lab-service,test-service,user-service]
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
@@ -40,48 +34,295 @@ jobs:
       - name: update kube Config file
         run: aws eks update-kubeconfig --name my_cluster --region us-east-1
 
-      - name: Run Strategy
-        env:
-         IMAGE: ghcr.io/${{ secrets.DOCKERUSER }}/${{ matrix.svc }}:${{ github.run_number }}
-        run: |
-            cd ${{ matrix.svc }}
-            mvn clean package -DskipTests
-            docker build . -t $IMAGE
-            docker push $IMAGE
-            kubectl set image deployment/${{ matrix.svc }}-deploy ${{ matrix.svc }}-image=$IMAGE
- 
-
-
-
-
-
+  address-service:
+     runs-on: ubuntu-latest
+     needs: deploy
+     defaults:
+      run:
+        working-directory: backend/address-service
+     if: github.event_path == backend/address-service/**
+     env:
+        imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/address-service:${{ github.run_number }}
+     
+     steps:
           
+      - name: Checkout code
+        uses: actions/checkout@v3
 
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
 
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: backend/address-service
+          push: true
+          tags: $imageTag
 
+      - name: Deploy to EKS cluster
+        run: |
+         echo ${{ github.event_path }}
+         kubectl set image deployment/address-service-deploy address-service-image=$imageTag
+ 
+  appointment-service:
+     runs-on: ubuntu-latest
+     needs: deploy
+     defaults:
+      run:
+        working-directory: backend/appointment-service
+     if: github.event_path == backend/appointment-service/**
+     env:
+          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/appointment-service:${{ github.run_number }}
+     
+     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
 
-    #   - name: Build and Push Docker Image
-    #     uses: docker/build-push-action@v2
-    #     with:
-    #       context: ./backend
-    #       push: true
-    #       tags: ghcr.io/${{ github.actor }}/auth0-bootcamp-backend:v${{ github.run_number }}
-        
-    #   - name: Configure AWS Credentials
-    #     uses: aws-actions/configure-aws-credentials@v1
-    #     with:
-    #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #       aws-region: ${{ secrets.AWS_REGION }}
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: backend/appointment-service
+          push: true
+          tags: $imageTag
 
-    #   - name: adding eks-cluster
-    #     env: 
-    #       aws_region: ${{ secrets.AWS_REGION }}
-    #       cluster_name: ${{ secrets.CLUSTER_NAME }}
-    #       IMAGE: ghcr.io/${{ github.actor }}/auth0-bootcamp-backend:v${{ github.run_number }}
-    #     run: |
-    #       aws eks --region $aws_region update-kubeconfig --name $cluster_name
-    #       kubectl set image deployment/backend-deployment backend-pod=$IMAGE
+      - name: Deploy to EKS cluster
+        run: |
+         echo ${{ github.event_path }}
+         kubectl set image deployment/appointment-service-deploy appointment-service-image=$imageTag
+
+  card-service:
+     runs-on: ubuntu-latest
+     needs: deploy
+     defaults:
+      run:
+        working-directory: backend/card-service
+     if: github.event_path == backend/card-service/**
+     env:
+          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/card-service:${{ github.run_number }}
+     
+     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: backend/card-service
+          push: true
+          tags: $imageTag
+
+      - name: Deploy to EKS cluster
+        run: |
+         echo ${{ github.event_path }}
+         kubectl set image deployment/card-service-deploy card-service-image=$imageTag
+      
+  cloud-gateway:
+     runs-on: ubuntu-latest
+     needs: deploy
+     defaults:
+      run:
+        working-directory: backend/cloud-gateway
+     if: github.event_path == backend/cloud-gateway/**
+     env:
+          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/cloud-gateway:${{ github.run_number }}
+     
+     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: backend/card-service
+          push: true
+          tags: $imageTag
+
+      - name: Deploy to EKS cluster
+        run: |
+         echo ${{ github.event_path }}
+         kubectl set image deployment/cloud-gateway-deploy cloud-gateway-image=$imageTag
+
+  lab-service:
+     runs-on: ubuntu-latest
+     needs: deploy
+     defaults:
+      run:
+        working-directory: backend/lab-service
+     if: github.event_path == backend/lab-service/**
+     env:
+          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/lab-service:${{ github.run_number }}
+     
+     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: backend/card-service
+          push: true
+          tags: $imageTag
+
+      - name: Deploy to EKS cluster
+        run: |
+         echo ${{ github.event_path }}
+         kubectl set image deployment/lab-service-deploy lab-service-image=$imageTag
+
+  patient-service:
+     runs-on: ubuntu-latest
+     needs: deploy
+     defaults:
+      run:
+        working-directory: backend/patient-service
+     if: github.event_path == backend/patient-service/**
+     env:
+          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/patient-service:${{ github.run_number }}
+     
+     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: backend/card-service
+          push: true
+          tags: $imageTag
+
+      - name: Deploy to EKS cluster
+        run: |
+         echo ${{ github.event_path }}
+         kubectl set image deployment/patient-service-deploy patient-service-image=$imageTag
+
+  service-registry:
+     runs-on: ubuntu-latest
+     needs: deploy
+     defaults:
+      run:
+        working-directory: backend/service-registry
+     if: github.event_path == backend/service-registry/**
+     env:
+          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/service-registry:${{ github.run_number }}
+     
+     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: backend/card-service
+          push: true
+          tags: $imageTag
+
+      - name: Deploy to EKS cluster
+        run: |
+         echo ${{ github.event_path }}
+         kubectl set image deployment/service-registry-deploy service-registry-image=$imageTag
+
+  test-lab-service:
+     runs-on: ubuntu-latest
+     needs: deploy
+     defaults:
+      run:
+        working-directory: backend/test-lab-service
+     if: github.event_path == backend/test-lab-service/**
+     env:
+          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/test-lab-service:${{ github.run_number }}
+     
+     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: backend/card-service
+          push: true
+          tags: $imageTag
+
+      - name: Deploy to EKS cluster
+        run: |
+         echo ${{ github.event_path }}
+         kubectl set image deployment/test-lab-service-deploy test-lab-service-image=$imageTag
+
+  test-service:
+     runs-on: ubuntu-latest
+     needs: deploy
+     defaults:
+      run:
+        working-directory: backend/test-service
+     if: github.event_path == backend/test-service/**
+     env:
+          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/test-service:${{ github.run_number }}
+     
+     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: backend/card-service
+          push: true
+          tags: $imageTag
+
+      - name: Deploy to EKS cluster
+        run: |
+         echo ${{ github.event_path }}
+         kubectl set image deployment/test-service-deploy test-service-image=$imageTag
+
+  user-service:
+     runs-on: ubuntu-latest
+     needs: deploy
+     defaults:
+      run:
+        working-directory: backend/ user-service
+     if: github.event_path == backend/ user-service/**
+     env:
+          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/ user-service:${{ github.run_number }}
+     
+     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: backend/card-service
+          push: true
+          tags: $imageTag
+
+      - name: Deploy to EKS cluster
+        run: |
+         echo ${{ github.event_path }}
+         kubectl set image deployment/ user-service-deploy  user-service-image=$imageTag
 
 
