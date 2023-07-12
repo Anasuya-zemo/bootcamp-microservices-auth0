@@ -10,6 +10,6 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: https://backend.spcluster.tk/
+      defaultZone: https://backend.spcluster.tk/eureka
   instance:
     hostname: appointment
