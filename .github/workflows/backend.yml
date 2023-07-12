@@ -144,7 +144,7 @@ jobs:
      defaults:
       run:
         working-directory: backend/cloud-gateway
-    #  if: startsWith(github.event_path, 'backend/cloud-gateway/')
+     if: startsWith(github.event_path, 'backend/cloud-gateway/')
      env:
           imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/cloud-gateway:${{ github.run_number }}
      
