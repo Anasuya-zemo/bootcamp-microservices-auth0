@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: output
-        run: echo "${{ github.event }}"
+        run: echo $github.event
 
       # - name: Build with Maven
       #   run: mvn clean install -DskipTests
