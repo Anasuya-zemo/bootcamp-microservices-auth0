@@ -11,7 +11,7 @@ on:
 jobs:
   address-service:
      runs-on: ubuntu-latest
-     if: contains(github.event.head_commit.modified, 'backend/address-service/**')
+     if: contains(github.event.head_commit.modified, 'backend/address-service/')
      defaults:
       run:
         working-directory: backend/address-service
