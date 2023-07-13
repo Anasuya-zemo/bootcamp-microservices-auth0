@@ -24,7 +24,7 @@ spec:
             value: https://backend.spcluster.tk/eureka/
           
           - name: eureka.instance.hostname
-            value: address
+            value: test-lab
 
           - name: spring.datasource.url
             value: jdbc:mysql://3.83.138.1:30001/zemoso_diagnostics?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC

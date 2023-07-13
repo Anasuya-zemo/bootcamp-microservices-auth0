@@ -11,7 +11,7 @@ on:
 jobs:
   address-service:
      runs-on: ubuntu-latest
-    #  if: contains(github.event_path, 'backend/address-service/**')
+     if: contains(github.event.head_commit.modified, 'backend/address-service/**')
      defaults:
       run:
         working-directory: backend/address-service
@@ -53,391 +53,391 @@ jobs:
       - name: Deploy to EKS cluster
         run: kubectl set image deployment/address-service-deploy address-service-image=$imageTag
  
-  appointment-service:
-     runs-on: ubuntu-latest
-     defaults:
-      run:
-        working-directory: backend/appointment-service
-    #  if: contains(github.event_path, 'backend/appointment-service/**')
-     env:
-          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/appointment-service:${{ github.run_number }}
+  # appointment-service:
+  #    runs-on: ubuntu-latest
+  #    defaults:
+  #     run:
+  #       working-directory: backend/appointment-service
+  #   #  if: contains(github.event_path, 'backend/appointment-service/**')
+  #    env:
+  #         imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/appointment-service:${{ github.run_number }}
      
-     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #    steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Build with Maven
-        run: mvn clean install -DskipTests
+  #     - name: Build with Maven
+  #       run: mvn clean install -DskipTests
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.DOCKERPW }}
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.DOCKERPW }}
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v2
-        with:
-          context: backend/appointment-service
-          push: true
-          tags: ghcr.io/${{ secrets.DOCKERUSER }}/appointment-service:${{ github.run_number }}
+  #     - name: Build and Push Docker Image
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: backend/appointment-service
+  #         push: true
+  #         tags: ghcr.io/${{ secrets.DOCKERUSER }}/appointment-service:${{ github.run_number }}
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: us-east-1
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+  #         aws-region: us-east-1
 
-      - name: update kube Config file
-        run: aws eks update-kubeconfig --name my_cluster --region us-east-1
+  #     - name: update kube Config file
+  #       run: aws eks update-kubeconfig --name my_cluster --region us-east-1
 
-      - name: Deploy to EKS cluster
-        run: kubectl set image deployment/appointment-service-deploy appointment-service-image=$imageTag
+  #     - name: Deploy to EKS cluster
+  #       run: kubectl set image deployment/appointment-service-deploy appointment-service-image=$imageTag
 
-  card-service:
-     runs-on: ubuntu-latest
-     defaults:
-      run:
-        working-directory: backend/card-service
-    #  if: contains(github.event_path, 'backend/card-service/**')
-     env:
-          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/card-service:${{ github.run_number }}
+  # card-service:
+  #    runs-on: ubuntu-latest
+  #    defaults:
+  #     run:
+  #       working-directory: backend/card-service
+  #   #  if: contains(github.event_path, 'backend/card-service/**')
+  #    env:
+  #         imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/card-service:${{ github.run_number }}
      
-     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #    steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Build with Maven
-        run: mvn clean install -DskipTests
+  #     - name: Build with Maven
+  #       run: mvn clean install -DskipTests
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.DOCKERPW }}
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.DOCKERPW }}
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v2
-        with:
-          context: backend/card-service
-          push: true
-          tags: ghcr.io/${{ secrets.DOCKERUSER }}/card-service:${{ github.run_number }}
+  #     - name: Build and Push Docker Image
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: backend/card-service
+  #         push: true
+  #         tags: ghcr.io/${{ secrets.DOCKERUSER }}/card-service:${{ github.run_number }}
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: us-east-1
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+  #         aws-region: us-east-1
 
-      - name: update kube Config file
-        run: aws eks update-kubeconfig --name my_cluster --region us-east-1
+  #     - name: update kube Config file
+  #       run: aws eks update-kubeconfig --name my_cluster --region us-east-1
 
-      - name: Deploy to EKS cluster
-        run: kubectl set image deployment/card-service-deploy card-service-image=$imageTag
+  #     - name: Deploy to EKS cluster
+  #       run: kubectl set image deployment/card-service-deploy card-service-image=$imageTag
       
-  cloud-gateway:
-     runs-on: ubuntu-latest
-     defaults:
-      run:
-        working-directory: backend/cloud-gateway
-    #  if: contains(github.event_path, 'backend/cloud-gateway/**')
-     env:
-          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/cloud-gateway:${{ github.run_number }}
+  # cloud-gateway:
+  #    runs-on: ubuntu-latest
+  #    defaults:
+  #     run:
+  #       working-directory: backend/cloud-gateway
+  #   #  if: contains(github.event_path, 'backend/cloud-gateway/**')
+  #    env:
+  #         imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/cloud-gateway:${{ github.run_number }}
      
-     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #    steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Build with Maven
-        run: mvn clean install -DskipTests
+  #     - name: Build with Maven
+  #       run: mvn clean install -DskipTests
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.DOCKERPW }}
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.DOCKERPW }}
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v2
-        with:
-          context: backend/cloud-gateway
-          push: true
-          tags: ghcr.io/${{ secrets.DOCKERUSER }}/cloud-gateway:${{ github.run_number }}
+  #     - name: Build and Push Docker Image
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: backend/cloud-gateway
+  #         push: true
+  #         tags: ghcr.io/${{ secrets.DOCKERUSER }}/cloud-gateway:${{ github.run_number }}
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: us-east-1
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+  #         aws-region: us-east-1
 
-      - name: update kube Config file
-        run: aws eks update-kubeconfig --name my_cluster --region us-east-1
+  #     - name: update kube Config file
+  #       run: aws eks update-kubeconfig --name my_cluster --region us-east-1
 
-      - name: Deploy to EKS cluster
-        run: kubectl set image deployment/cloud-gateway-deploy cloud-gateway-image=$imageTag
+  #     - name: Deploy to EKS cluster
+  #       run: kubectl set image deployment/cloud-gateway-deploy cloud-gateway-image=$imageTag
 
-  lab-service:
-     runs-on: ubuntu-latest
-     defaults:
-      run:
-        working-directory: backend/lab-service
-    #  if: contains(github.event_path, 'backend/lab-service/**')
-     env:
-          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/lab-service:${{ github.run_number }}
+  # lab-service:
+  #    runs-on: ubuntu-latest
+  #    defaults:
+  #     run:
+  #       working-directory: backend/lab-service
+  #   #  if: contains(github.event_path, 'backend/lab-service/**')
+  #    env:
+  #         imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/lab-service:${{ github.run_number }}
      
-     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #    steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Build with Maven
-        run: mvn clean install -DskipTests
+  #     - name: Build with Maven
+  #       run: mvn clean install -DskipTests
       
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.DOCKERPW }}
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.DOCKERPW }}
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v2
-        with:
-          context: backend/lab-service
-          push: true
-          tags: ghcr.io/${{ secrets.DOCKERUSER }}/lab-service:${{ github.run_number }}
+  #     - name: Build and Push Docker Image
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: backend/lab-service
+  #         push: true
+  #         tags: ghcr.io/${{ secrets.DOCKERUSER }}/lab-service:${{ github.run_number }}
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: us-east-1
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+  #         aws-region: us-east-1
 
-      - name: update kube Config file
-        run: aws eks update-kubeconfig --name my_cluster --region us-east-1
+  #     - name: update kube Config file
+  #       run: aws eks update-kubeconfig --name my_cluster --region us-east-1
 
-      - name: Deploy to EKS cluster
-        run: kubectl set image deployment/lab-service-deploy lab-service-image=$imageTag
+  #     - name: Deploy to EKS cluster
+  #       run: kubectl set image deployment/lab-service-deploy lab-service-image=$imageTag
 
-  patient-service:
-     runs-on: ubuntu-latest
-     defaults:
-      run:
-        working-directory: backend/patient-service
-    #  if: contains(github.event_path, 'backend/patient-service/**')
-     env:
-          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/patient-service:${{ github.run_number }}
+  # patient-service:
+  #    runs-on: ubuntu-latest
+  #    defaults:
+  #     run:
+  #       working-directory: backend/patient-service
+  #   #  if: contains(github.event_path, 'backend/patient-service/**')
+  #    env:
+  #         imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/patient-service:${{ github.run_number }}
      
-     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #    steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Build with Maven
-        run: mvn clean install -DskipTests
+  #     - name: Build with Maven
+  #       run: mvn clean install -DskipTests
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.DOCKERPW }}
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.DOCKERPW }}
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v2
-        with:
-          context: backend/patient-service
-          push: true
-          tags: ghcr.io/${{ secrets.DOCKERUSER }}/patient-service:${{ github.run_number }}
+  #     - name: Build and Push Docker Image
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: backend/patient-service
+  #         push: true
+  #         tags: ghcr.io/${{ secrets.DOCKERUSER }}/patient-service:${{ github.run_number }}
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: us-east-1
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+  #         aws-region: us-east-1
 
-      - name: update kube Config file
-        run: aws eks update-kubeconfig --name my_cluster --region us-east-1
+  #     - name: update kube Config file
+  #       run: aws eks update-kubeconfig --name my_cluster --region us-east-1
 
-      - name: Deploy to EKS cluster
-        run: kubectl set image deployment/patient-service-deploy patient-service-image=$imageTag
+  #     - name: Deploy to EKS cluster
+  #       run: kubectl set image deployment/patient-service-deploy patient-service-image=$imageTag
 
-  service-registry:
-     runs-on: ubuntu-latest
-     defaults:
-      run:
-        working-directory: backend/service-registry
-    #  if: contains(github.event_path, 'backend/service-registry/**')
-     env:
-          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/service-registry:${{ github.run_number }}
+  # service-registry:
+  #    runs-on: ubuntu-latest
+  #    defaults:
+  #     run:
+  #       working-directory: backend/service-registry
+  #   #  if: contains(github.event_path, 'backend/service-registry/**')
+  #    env:
+  #         imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/service-registry:${{ github.run_number }}
      
-     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #    steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Build with Maven
-        run: mvn clean install -DskipTests
+  #     - name: Build with Maven
+  #       run: mvn clean install -DskipTests
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.DOCKERPW }}
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.DOCKERPW }}
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v2
-        with:
-          context: backend/service-registry
-          push: true
-          tags: ghcr.io/${{ secrets.DOCKERUSER }}/service-registry:${{ github.run_number }}
+  #     - name: Build and Push Docker Image
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: backend/service-registry
+  #         push: true
+  #         tags: ghcr.io/${{ secrets.DOCKERUSER }}/service-registry:${{ github.run_number }}
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: us-east-1
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+  #         aws-region: us-east-1
 
-      - name: update kube Config file
-        run: aws eks update-kubeconfig --name my_cluster --region us-east-1
+  #     - name: update kube Config file
+  #       run: aws eks update-kubeconfig --name my_cluster --region us-east-1
 
-      - name: Deploy to EKS cluster
-        run: kubectl set image deployment/service-registry-deploy service-registry-image=$imageTag
+  #     - name: Deploy to EKS cluster
+  #       run: kubectl set image deployment/service-registry-deploy service-registry-image=$imageTag
 
-  test-lab-service:
-     runs-on: ubuntu-latest
-     defaults:
-      run:
-        working-directory: backend/test-lab-service
-    #  if: contains(github.event_path, 'backend/test-lab-service/**')
-     env:
-          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/test-lab-service:${{ github.run_number }}
+  # test-lab-service:
+  #    runs-on: ubuntu-latest
+  #    defaults:
+  #     run:
+  #       working-directory: backend/test-lab-service
+  #   #  if: contains(github.event_path, 'backend/test-lab-service/**')
+  #    env:
+  #         imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/test-lab-service:${{ github.run_number }}
      
-     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #    steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Build with Maven
-        run: mvn clean install -DskipTests
+  #     - name: Build with Maven
+  #       run: mvn clean install -DskipTests
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.DOCKERPW }}
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.DOCKERPW }}
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v2
-        with:
-          context: backend/test-lab-service
-          push: true
-          tags: ghcr.io/${{ secrets.DOCKERUSER }}/test-lab-service:${{ github.run_number }}
+  #     - name: Build and Push Docker Image
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: backend/test-lab-service
+  #         push: true
+  #         tags: ghcr.io/${{ secrets.DOCKERUSER }}/test-lab-service:${{ github.run_number }}
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: us-east-1
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+  #         aws-region: us-east-1
 
-      - name: update kube Config file
-        run: aws eks update-kubeconfig --name my_cluster --region us-east-1
+  #     - name: update kube Config file
+  #       run: aws eks update-kubeconfig --name my_cluster --region us-east-1
 
-      - name: Deploy to EKS cluster
-        run: kubectl set image deployment/test-lab-service-deploy test-lab-service-image=$imageTag
+  #     - name: Deploy to EKS cluster
+  #       run: kubectl set image deployment/test-lab-service-deploy test-lab-service-image=$imageTag
 
-  test-service:
-     runs-on: ubuntu-latest
-     defaults:
-      run:
-        working-directory: backend/test-service
-    #  if: contains(github.event_path, 'backend/test-service/**')
-     env:
-          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/test-service:${{ github.run_number }}
+  # test-service:
+  #    runs-on: ubuntu-latest
+  #    defaults:
+  #     run:
+  #       working-directory: backend/test-service
+  #   #  if: contains(github.event_path, 'backend/test-service/**')
+  #    env:
+  #         imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/test-service:${{ github.run_number }}
      
-     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #    steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Build with Maven
-        run: mvn clean install -DskipTests
+  #     - name: Build with Maven
+  #       run: mvn clean install -DskipTests
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.DOCKERPW }}
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.DOCKERPW }}
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v2
-        with:
-          context: backend/test-service
-          push: true
-          tags: ghcr.io/${{ secrets.DOCKERUSER }}/test-service:${{ github.run_number }}
+  #     - name: Build and Push Docker Image
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: backend/test-service
+  #         push: true
+  #         tags: ghcr.io/${{ secrets.DOCKERUSER }}/test-service:${{ github.run_number }}
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: us-east-1
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+  #         aws-region: us-east-1
 
-      - name: update kube Config file
-        run: aws eks update-kubeconfig --name my_cluster --region us-east-1
+  #     - name: update kube Config file
+  #       run: aws eks update-kubeconfig --name my_cluster --region us-east-1
 
-      - name: Deploy to EKS cluster
-        run: kubectl set image deployment/test-service-deploy test-service-image=$imageTag
+  #     - name: Deploy to EKS cluster
+  #       run: kubectl set image deployment/test-service-deploy test-service-image=$imageTag
 
-  user-service:
-     runs-on: ubuntu-latest
-     defaults:
-      run:
-        working-directory: backend/user-service
-    #  if: contains(github.event_path, 'backend/user-service/**')
-     env:
-          imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/user-service:${{ github.run_number }}
+  # user-service:
+  #    runs-on: ubuntu-latest
+  #    defaults:
+  #     run:
+  #       working-directory: backend/user-service
+  #   #  if: contains(github.event_path, 'backend/user-service/**')
+  #    env:
+  #         imageTag: ghcr.io/${{ secrets.DOCKERUSER }}/user-service:${{ github.run_number }}
      
-     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #    steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Build with Maven
-        run: mvn clean install -DskipTests
+  #     - name: Build with Maven
+  #       run: mvn clean install -DskipTests
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.DOCKERPW }}
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.DOCKERPW }}
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v2
-        with:
-          context: backend/user-service
-          push: true
-          tags: ghcr.io/${{ secrets.DOCKERUSER }}/user-service:${{ github.run_number }}
+  #     - name: Build and Push Docker Image
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: backend/user-service
+  #         push: true
+  #         tags: ghcr.io/${{ secrets.DOCKERUSER }}/user-service:${{ github.run_number }}
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: us-east-1
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY}}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+  #         aws-region: us-east-1
 
-      - name: update kube Config file
-        run: aws eks update-kubeconfig --name my_cluster --region us-east-1
+  #     - name: update kube Config file
+  #       run: aws eks update-kubeconfig --name my_cluster --region us-east-1
 
-      - name: Deploy to EKS cluster
-        run: kubectl set image deployment/user-service-deploy  user-service-image=$imageTag
+  #     - name: Deploy to EKS cluster
+  #       run: kubectl set image deployment/user-service-deploy  user-service-image=$imageTag
 
 

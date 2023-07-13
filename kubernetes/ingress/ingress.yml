@@ -2,6 +2,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata: 
   name: my-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
   rules:
@@ -28,69 +30,86 @@ spec:
   - host: backend.spcluster.tk
     http:
       paths:
-        - path: /
+        - path: /$
+          pathType: Exact
+          backend:
+            service:
+              name: service-registry
+              port:
+                number: 8761
+        - path: /eureka
           pathType: Prefix
           backend:
             service:
               name: service-registry
               port:
                 number: 8761
-        - path: /address
+        - path: /
           pathType: Prefix
           backend:
             service:
-              name: address
+              name: cloud-gateway
               port:
-                number: 9001
-        - path: /appointments
-          pathType: Prefix
-          backend:
-            service:
-              name: appointment
-              port:
-                number: 9002
-        - path: /cards
-          pathType: Prefix
-          backend:
-            service:
-              name: card
-              port:
-                number: 9003
-        - path: /labs
-          pathType: Prefix
-          backend:
-            service:
-              name: lab
-              port:
-                number: 9004
-        - path: /patients
-          pathType: Prefix
-          backend:
-            service:
-              name: patient
-              port:
-                number: 9005
-        - path: /testlabs
-          pathType: Prefix
-          backend:
-            service:
-              name: test-lab
-              port:
-                number: 9006
-        - path: /tests
-          pathType: Prefix
-          backend:
-            service:
-              name: test
-              port:
-                number: 9007
-        - path: /users
-          pathType: Prefix
-          backend:
-            service:
-              name: user
-              port:
-                number: 9008
+                number: 9191
+       
+        
+        
+        # - path: /address
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: address
+        #       port:
+        #         number: 9001
+        # - path: /appointments
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: appointment
+        #       port:
+        #         number: 9002
+        # - path: /cards
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: card
+        #       port:
+        #         number: 9003
+        # - path: /labs
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: lab
+        #       port:
+        #         number: 9004
+        # - path: /patients
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: patient
+        #       port:
+        #         number: 9005
+        # - path: /testlabs
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: test-lab
+        #       port:
+        #         number: 9006
+        # - path: /tests
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: test
+        #       port:
+        #         number: 9007
+        # - path: /users
+        #   pathType: Prefix
+        #   backend:
+        #     service:
+        #       name: user
+        #       port:
+        #         number: 9008
 
               
 
