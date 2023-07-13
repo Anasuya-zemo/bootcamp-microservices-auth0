@@ -12,4 +12,4 @@ eureka:
     service-url:
       defaultZone: https://bacd.spcluster.tk/eureka
   instance:
-    hostname: adesssdada
+    hostname: adesssdadacd
