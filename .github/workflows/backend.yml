@@ -27,6 +27,12 @@ jobs:
          run: |
           echo "${{ github.event.head_commit.modified }}"
           echo "${{ toJson(github.event.head_commit.modified) }}"
+
+       - name: Print GitHub Context
+         env:
+            GITHUB_CONTEXT: ${{ toJson(github) }}
+         run: echo "$GITHUB_CONTEXT"
+
      
 
       # - name: Build with Maven
